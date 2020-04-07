@@ -69,7 +69,7 @@ let x = [];
 function trailsHandler (request,response){
   const lan = request.query.latitude;
   const long = request.query.longitude;
-  superagent(`https://www.hikingproject.com/data/get-trails?lat=${lan}&lon=${long}&maxDistance=10&key=${process.env.TRAIL_API_KEY}`)
+  superagent(`https://www.hikingproject.com/data/get-trails?lat=${lan}&lon=${long}&maxDistance=200&key=${process.env.TRAIL_API_KEY}`)
     .then ( hiking =>{
       hiking.body.map(data =>{
         const trail = new Trails(data);
