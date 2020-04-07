@@ -65,18 +65,25 @@ function Weather(day) {
   this.time = new Date(day.valid_date).toString().slice(0, 15);
 }
 
-let x = [];
+
 function trailsHandler (request,response){
   const lan = request.query.latitude;
   const long = request.query.longitude;
-  superagent(`https://www.hikingproject.com/data/get-trails?lat=${lan}&lon=${long}&maxDistance=200&key=${process.env.TRAIL_API_KEY}`)
-    .then ( hiking =>{
-      hiking.body.map(data =>{
-        const trail = new Trails(data);
-        x.push(trail);
 
+  getTrailData(lan,long).then(trailData=>{
+    response.status(200).json(trailData);
+  });
+
+
+}
+function getTrailData(lan,long){
+
+  superagent(`https://www.hikingproject.com/data/get-trails?lat=${lan}&lon=${long}&maxDistance=400&key=${process.env.TRAIL_API_KEY}`)
+    .then ( hiking =>{
+      let trailsInfo = hiking.body.trails.map(val=>{
+        return new Trails(val);
       });
-      response.send(x);
+      return trailsInfo;
     });
 }
 
